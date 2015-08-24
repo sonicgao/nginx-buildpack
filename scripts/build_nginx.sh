@@ -9,9 +9,9 @@
 # Once the dyno has is 'up' you can open your browser and navigate
 # this dyno's directory structure to download the nginx binary.
 
-NGINX_VERSION=${NGINX_VERSION-1.6.2}
-PCRE_VERSION=${PCRE_VERSION-8.21}
-HEADERS_MORE_VERSION=${HEADERS_MORE_VERSION-0.25}
+NGINX_VERSION=${NGINX_VERSION-1.6.3}
+PCRE_VERSION=${PCRE_VERSION-8.37}
+HEADERS_MORE_VERSION=${HEADERS_MORE_VERSION-0.261}
 
 nginx_tarball_url=http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz
 pcre_tarball_url=http://garr.dl.sourceforge.net/project/pcre/pcre/${PCRE_VERSION}/pcre-${PCRE_VERSION}.tar.bz2
@@ -36,16 +36,17 @@ echo "Downloading $headers_more_nginx_module_url"
 (cd nginx-${NGINX_VERSION} && curl -L $headers_more_nginx_module_url | tar xvz )
 
 (
-	cd nginx-${NGINX_VERSION}
-	./configure \
-		--with-pcre=pcre-${PCRE_VERSION} \
-		--prefix=/tmp/nginx \
-		--add-module=/${temp_dir}/nginx-${NGINX_VERSION}/headers-more-nginx-module-${HEADERS_MORE_VERSION}
-	make install
+    cd nginx-${NGINX_VERSION}
+    ./configure \
+        --with-pcre=pcre-${PCRE_VERSION} \
+        --with-http_gzip_static_module \
+        --prefix=/tmp/nginx \
+        --add-module=/${temp_dir}/nginx-${NGINX_VERSION}/headers-more-nginx-module-${HEADERS_MORE_VERSION}
+    make install
 )
 
 while true
 do
-	sleep 1
-	echo "."
+    sleep 1
+    echo "."
 done
